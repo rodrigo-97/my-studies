@@ -3,7 +3,9 @@ package com.app.mystudies.msstudent.controllers;
 import java.util.List;
 import java.util.Optional;
 
+import com.app.mystudies.msstudent.interfaces.TeatcherFeignClient;
 import com.app.mystudies.msstudent.models.Student;
+import com.app.mystudies.msstudent.models.Teatcher;
 import com.app.mystudies.msstudent.repositories.StudentRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class StudentController {
     @Autowired
     private StudentRepository studentRepository;
+
+    @Autowired
+    private TeatcherFeignClient teatcherFeignClient;
 
     @GetMapping
     public ResponseEntity<List<Student>> getAll() {
@@ -77,6 +82,18 @@ public class StudentController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+        }
+    }
+
+
+    // ACESSA RECURSO DE UM OUTRO MICRO SERVIÇO
+    @GetMapping("/teatchers")
+    public ResponseEntity<List<Teatcher>> getAllTeatchers() {
+        try {
+            List<Teatcher> teatchers = teatcherFeignClient.getAll().getBody();
+            return new ResponseEntity<List<Teatcher>>(teatchers, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
