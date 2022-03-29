@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Component
-@FeignClient(value = "ms-teatcher", url = "http://localhost:8081/api/v1", path = "/teatchers")
+@FeignClient(value = "ms-teatcher", path = "/teatchers")
 public interface TeatcherFeignClient {
     
     @GetMapping
